@@ -8,27 +8,91 @@ function App() {
   const complexArray = ["sin", "cos", "tan", "ctg"];
   const partialArray = ["1/x", ".", "neg", "="];
   const [inputValue, setInputValue] = useState('');
-  const reg = /[0-9]/gi;
+  const [baseOperation, setBaseOperation] = useState("");
+  const regex = /[0-9]/gi;
+  const [memo, setMemo] = useState(0);
+
+  const operations = {
+    '+': (a, b) => a + b,
+    '-': (a, b) => a - b,
+    '*': (a, b) => a * b,
+    '/': (a, b) => a / b,
+    '%': (a, b) => a % b,
+  }
 
   const selectOperation = (state) => {
     setInputValue(state);
-    console.log(inputValue)
+    // console.log(inputValue)
   };
 
-  const addNumber = (value) => (e) => {
-    value = e.target.value;
-    setInputValue(value);
+  const basicOperation = (state) => {
+    switch (state) {
+      case "+":
+        setBaseOperation("+")
+        setMemo(inputValue)
+        console.log("sum");
+        break;
+      case "-":
+        setBaseOperation("-")
+        setMemo(inputValue)
+        console.log("substraction");
+        break;
+      case "*":
+        setBaseOperation("*")
+        setMemo(inputValue)
+        console.log("multiplication");
+        break;
+      case "/":
+        setBaseOperation("/")
+        setMemo(inputValue)
+        console.log("divide");
+        break;
+      case "%":
+        setBaseOperation("%")
+        setMemo(inputValue)
+        console.log("divide with rest");
+        break;
+      default:
+        console.log(`Select an option.`);
+    }
+  }
+
+  const partialOperation = (state) => {
+    let newVar;
+    switch (state) {
+      case "1/x":
+        console.log("inverse");
+        break;
+      case ".":
+        console.log("digit");
+        break;
+      case "neg":
+        console.log("negation");
+        break;
+      case "=":
+        newVar = operations[baseOperation](memo, inputValue);
+        console.log("equal");
+        setInputValue(newVar)
+        break;
+      default:
+        console.log(`Select an option.`);
+    }
+  }
+
+  const addNumber = (state) => {
+    setInputValue(state);
   };
 
   const handleInputChange = (e) => {
-    // let newInputValue = inputValue;
-    // newInputValue = e.target.value.match(reg);
-    // if (newInputValue)
-    // setInputValue(newInputValue);
-    let newInputValue = inputValue;
-    newInputValue = e.target.value;
+    const { value } = e.target;
+    const matches = value.match(regex);
+    const newInputValue = matches ? matches.join('') : '';
     setInputValue(newInputValue)
   };
+
+  const handleMemo = () => {
+
+  }
 
   return (
     <div className="App">
@@ -37,15 +101,20 @@ function App() {
       </header>
       <main>
         <section>
-          <input type="text" onChange={handleInputChange} value={inputValue} />
+          <div>
+            <input type="text" onChange={handleMemo} />
+          </div>
+          <div>
+            <input type="text" onChange={handleInputChange} value={inputValue} />
+          </div>
           <div>
             {numberArray.map((number) => (
-              <button key={number} onClick={() => selectOperation(number)}>{number}</button>
+              <button key={number} onClick={() => addNumber(number)}>{number}</button>
             ))}
           </div>
           <div>
             {basicArray.map((base_op) => (
-              <button key={base_op} onClick={() => selectOperation(base_op)}>{base_op}</button>
+              <button key={base_op} onClick={() => basicOperation(base_op)}>{base_op}</button>
             ))}
           </div>
           <div>
@@ -60,7 +129,7 @@ function App() {
           </div>
           <div>
             {partialArray.map((partial_op) => (
-              <button key={partial_op} onClick={() => selectOperation(partial_op)}>{partial_op}</button>
+              <button key={partial_op} onClick={() => partialOperation(partial_op)}>{partial_op}</button>
             ))}
           </div>
         </section>
