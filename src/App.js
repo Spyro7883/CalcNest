@@ -20,9 +20,14 @@ function App() {
     '%': (a, b) => a % b,
   }
 
-  const selectOperation = (state) => {
+  const calculate = (state) => {
+    // console.log(`Input value is: ${typeof inputValue}`)
+    // console.log(`State is: ${typeof state}`)
+    // const newValue = inputValue + state;
+    // if (state !== '') {
+    //   setInputValue(newValue);
+    // }
     setInputValue(state);
-    // console.log(inputValue)
   };
 
   const basicOperation = (state) => {
@@ -30,6 +35,7 @@ function App() {
       case "+":
         setBaseOperation("+")
         setMemo(inputValue)
+        // setInputValue('');
         console.log("sum");
         break;
       case "-":
@@ -70,7 +76,7 @@ function App() {
         console.log("negation");
         break;
       case "=":
-        newVar = operations[baseOperation](memo, inputValue);
+        newVar = baseOperation ? operations[baseOperation](Number(memo), Number(inputValue)) : newVar;
         console.log("equal");
         setInputValue(newVar)
         break;
@@ -78,10 +84,6 @@ function App() {
         console.log(`Select an option.`);
     }
   }
-
-  const addNumber = (state) => {
-    setInputValue(state);
-  };
 
   const handleInputChange = (e) => {
     const { value } = e.target;
@@ -109,7 +111,7 @@ function App() {
           </div>
           <div>
             {numberArray.map((number) => (
-              <button key={number} onClick={() => addNumber(number)}>{number}</button>
+              <button key={number} onClick={() => calculate(number)}>{number}</button>
             ))}
           </div>
           <div>
@@ -119,12 +121,12 @@ function App() {
           </div>
           <div>
             {intermediateArray.map((inter_op) => (
-              <button key={inter_op} onClick={() => selectOperation(inter_op)}>{inter_op}</button>
+              <button key={inter_op} onClick={() => calculate(inter_op)}>{inter_op}</button>
             ))}
           </div>
           <div>
             {complexArray.map((complex_op) => (
-              <button key={complex_op} onClick={() => selectOperation(complex_op)}>{complex_op}</button>
+              <button key={complex_op} onClick={() => calculate(complex_op)}>{complex_op}</button>
             ))}
           </div>
           <div>
