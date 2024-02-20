@@ -10,7 +10,7 @@ function App() {
   const [inputValue, setInputValue] = useState('');
   const [baseOperation, setBaseOperation] = useState("");
   const regex = /[0-9]/gi;
-  const [memo, setMemo] = useState(0);
+  const [memo, setMemo] = useState("");
 
   const operations = {
     '+': (a, b) => a + b,
@@ -27,7 +27,8 @@ function App() {
     // if (state !== '') {
     //   setInputValue(newValue);
     // }
-    setInputValue(state);
+    console.log(typeof memo);
+    memo === "" ? setInputValue(state) : setMemo(state);
   };
 
   const basicOperation = (state) => {
@@ -90,6 +91,7 @@ function App() {
     const matches = value.match(regex);
     const newInputValue = matches ? matches.join('') : '';
     setInputValue(newInputValue)
+    // memo === "" ? setInputValue(newInputValue) : setMemo(newInputValue);
   };
 
   const handleMemo = () => {
