@@ -8,9 +8,10 @@ function App() {
   const complexArray = ["sin", "cos", "tan", "ctg"];
   const partialArray = ["1/x", ".", "neg", "="];
   const [inputValue, setInputValue] = useState('');
+  const [memo, setMemo] = useState("");
+  const [showInput, setShowInput] = useState(false);
   const [baseOperation, setBaseOperation] = useState("");
   const regex = /[0-9]/gi;
-  const [memo, setMemo] = useState("");
 
   const operations = {
     '+': (a, b) => a + b,
@@ -21,14 +22,12 @@ function App() {
   }
 
   const calculate = (state) => {
-    // console.log(`Input value is: ${typeof inputValue}`)
-    // console.log(`State is: ${typeof state}`)
-    // const newValue = inputValue + state;
-    // if (state !== '') {
-    //   setInputValue(newValue);
-    // }
-    console.log(typeof memo);
-    memo === "" ? setInputValue(state) : setMemo(state);
+    // console.log(`Number value is: ${String(inputValue) + state}`);
+    // let useVar = showInput ? memo : inputValue;
+
+    showInput ? setMemo(state) : setInputValue(state);
+    // showInput ? setMemo(Number(String(useVar) + state)) : setInputValue(Number(String(useVar) + state));
+    // showInput ? setMemo(Number(String(memo) + state)) : setInputValue(Number(String(inputValue) + state));
   };
 
   const basicOperation = (state) => {
@@ -36,6 +35,7 @@ function App() {
       case "+":
         setBaseOperation("+")
         setMemo(inputValue)
+        setShowInput(true);
         // setInputValue('');
         console.log("sum");
         break;
@@ -77,9 +77,11 @@ function App() {
         console.log("negation");
         break;
       case "=":
+        // setMemo(inputValue)
         newVar = baseOperation ? operations[baseOperation](Number(memo), Number(inputValue)) : newVar;
         console.log("equal");
-        setInputValue(newVar)
+        setInputValue(newVar);
+        setShowInput(false);
         break;
       default:
         console.log(`Select an option.`);
@@ -90,8 +92,7 @@ function App() {
     const { value } = e.target;
     const matches = value.match(regex);
     const newInputValue = matches ? matches.join('') : '';
-    setInputValue(newInputValue)
-    // memo === "" ? setInputValue(newInputValue) : setMemo(newInputValue);
+    showInput ? setMemo(newInputValue) : setInputValue(newInputValue);
   };
 
   const handleMemo = () => {
@@ -109,7 +110,7 @@ function App() {
             <input type="text" onChange={handleMemo} />
           </div>
           <div>
-            <input type="text" onChange={handleInputChange} value={inputValue} />
+            <input type="text" onChange={handleInputChange} value={showInput ? memo : inputValue} />
           </div>
           <div>
             {numberArray.map((number) => (
